@@ -1,10 +1,14 @@
 import { Component } from 'react';
 // import * as ImageGalleryAPI from './services/gallery_api';
+import { BallTriangle } from 'react-loader-spinner';
 import { ToastContainer, promise, toast } from 'react-toastify';
 
 import Searchbar from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 // import { ImageGalleryItem } from './components/ImageGalleryItem/ImageGalleryItem';
+
+let page = 1;
+const API_KEY = '31522217-1daa00f4dac69c1e930d1cd07';
 
 export default class ImageFinderApp extends Component {
   state = {
@@ -12,6 +16,7 @@ export default class ImageFinderApp extends Component {
     images: [],
     loading: false,
     error: null,
+    paginationBtn: false,
     status: 'idle',
   };
 
@@ -30,13 +35,45 @@ export default class ImageFinderApp extends Component {
     this.setState({ searchName: value });
   };
 
+  handlePagination = (e) => {
+    e.preventDefault();
+
+    page += 1;
+    console.log(page);
+
+    setTimeout(() => {
+      fetch(
+        `https://pixabay.com/api/?q=${this.state.searchName}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
+      )
+        .then((response) => {
+          if (response.ok) {
+            console.log('response is ok');
+            return response.json();
+          }
+          return Promise.reject(
+            new Error(
+              `We do not have images with tags "${this.state.searchName}"`
+            )
+          );
+        })
+        .then((images) => {
+          console.log(images);
+          this.setState({ images });
+        })
+        .catch((error) => this.setState({ error }))
+        .finally(
+          this.setState({ loading: false, error: null, paginationBtn: true })
+        );
+    }, 500);
+  };
+
   componentDidUpdate(prevProp, prevState) {
     if (prevState.searchName !== this.state.searchName) {
       console.log('The search request was changed');
       this.setState({ loading: true });
       // this.setState({ status: 'pending' });
 
-      const API_KEY = '31522217-1daa00f4dac69c1e930d1cd07';
+      // const API_KEY = '31522217-1daa00f4dac69c1e930d1cd07';
       // const PAGES = 'per_page=12';
       let page = 1;
 
@@ -70,7 +107,9 @@ export default class ImageFinderApp extends Component {
             this.setState({ images });
           })
           .catch((error) => this.setState({ error }))
-          .finally(this.setState({ loading: false, error: null }));
+          .finally(
+            this.setState({ loading: false, error: null, paginationBtn: true })
+          );
       }, 500);
     }
   }
@@ -123,10 +162,26 @@ export default class ImageFinderApp extends Component {
       <div>
         {/* The Gallery will be here soon... */}
         <Searchbar onSubmit={this.handleSearchName} />
-        {this.state.loading && <p>Loading</p>}
+        {this.state.loading && (
+          <div style={{ display: 'flex', ['justify-content']: 'center' }}>
+            <BallTriangle
+              height={70}
+              width={70}
+              radius={5}
+              color="#3f51b5"
+              ariaLabel="ball-triangle-loading"
+              wrapperClass={{}}
+              wrapperStyle=""
+              visible={true}
+            />
+          </div>
+        )}
         <ImageGallery items={this.state.images} />
-
-        
+        {this.state.paginationBtn && (
+          <button className="btn btn-primary" onClick={this.handlePagination}>
+            Load more
+          </button>
+        )}
       </div>
     );
   }
