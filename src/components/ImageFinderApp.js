@@ -1,8 +1,8 @@
 import { Component } from 'react';
 // import * as ImageGalleryAPI from './services/gallery_api';
 
-import Searchbar from './components/Searchbar/Searchbar';
-import { ImageGallery } from './components/ImageGallery/ImageGallery';
+import Searchbar from './Searchbar/Searchbar';
+import { ImageGallery } from './ImageGallery/ImageGallery';
 // import { ImageGalleryItem } from './components/ImageGalleryItem/ImageGalleryItem';
 
 export default class ImageFinderApp extends Component {
