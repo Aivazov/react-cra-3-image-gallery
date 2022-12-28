@@ -1,5 +1,6 @@
 import { Component } from 'react';
 // import * as ImageGalleryAPI from './services/gallery_api';
+import { ToastContainer, promise, toast } from 'react-toastify';
 
 import Searchbar from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
@@ -32,7 +33,7 @@ export default class ImageFinderApp extends Component {
   componentDidUpdate(prevProp, prevState) {
     if (prevState.searchName !== this.state.searchName) {
       console.log('The search request was changed');
-
+      this.setState({ loading: true });
       // this.setState({ status: 'pending' });
 
       const API_KEY = '31522217-1daa00f4dac69c1e930d1cd07';
@@ -122,7 +123,10 @@ export default class ImageFinderApp extends Component {
       <div>
         {/* The Gallery will be here soon... */}
         <Searchbar onSubmit={this.handleSearchName} />
+        {this.state.loading && <p>Loading</p>}
         <ImageGallery items={this.state.images} />
+
+        
       </div>
     );
   }

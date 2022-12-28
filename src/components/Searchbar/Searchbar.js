@@ -31,8 +31,6 @@ export default class Searchbar extends Component {
   render() {
     return (
       <header className="searchbar">
-        <ToastContainer />
-
         <form className="form" onSubmit={this.handleSubmit}>
           <button type="submit" className="button">
             <BiSearch size="32" className="react-icons-search" />
@@ -49,6 +47,18 @@ export default class Searchbar extends Component {
             onChange={this.handleSearchingNameChange}
           />
         </form>
+        <ToastContainer
+          position="top-right"
+          autoClose={2000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
       </header>
     );
   }
