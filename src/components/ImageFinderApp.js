@@ -2,13 +2,16 @@ import { Component } from 'react';
 // import * as ImageGalleryAPI from './services/gallery_api';
 import { BallTriangle } from 'react-loader-spinner';
 import { ToastContainer, promise, toast } from 'react-toastify';
+import GalleryAPI from './service/API';
 
 import Searchbar from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
+// import GalleryAPI from './service/API';
 // import { ImageGalleryItem } from './components/ImageGalleryItem/ImageGalleryItem';
 
 let page = 1;
 const API_KEY = '31522217-1daa00f4dac69c1e930d1cd07';
+const galleryAPI = new GalleryAPI();
 
 export default class ImageFinderApp extends Component {
   state = {
@@ -38,32 +41,37 @@ export default class ImageFinderApp extends Component {
   handlePagination = (e) => {
     e.preventDefault();
 
-    page += 1;
-    console.log(page);
+    // page += 1;
+    // console.log(page);
+    galleryAPI.fetchImages(this.state.searchName);
+    //   .then((images) => {
+    //   console.log(images);
+    //   this.setState({ images });
+    // });
 
     // setTimeout(() => {
-      fetch(
-        `https://pixabay.com/api/?q=${this.state.searchName}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
-      )
-        .then((response) => {
-          if (response.ok) {
-            console.log('response is ok');
-            return response.json();
-          }
-          return Promise.reject(
-            new Error(
-              `We do not have images with tags "${this.state.searchName}"`
-            )
-          );
-        })
-        .then((images) => {
-          console.log(images);
-          this.setState({ images });
-        })
-        .catch((error) => this.setState({ error }))
-        .finally(
-          this.setState({ loading: false, error: null, paginationBtn: true })
-        );
+    // fetch(
+    //   `https://pixabay.com/api/?q=${this.state.searchName}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
+    // )
+    //   .then((response) => {
+    //     if (response.ok) {
+    //       console.log('response is ok');
+    //       return response.json();
+    //     }
+    //     return Promise.reject(
+    //       new Error(
+    //         `We do not have images with tags "${this.state.searchName}"`
+    //       )
+    //     );
+    //   })
+    //   .then((images) => {
+    //     console.log(images);
+    //     this.setState({ images });
+    //   })
+    //   .catch((error) => this.setState({ error }))
+    //   .finally(
+    //     this.setState({ loading: false, error: null, paginationBtn: true })
+    //   );
     // }, 500);
   };
 
@@ -88,6 +96,18 @@ export default class ImageFinderApp extends Component {
       //   });
 
       setTimeout(() => {
+        galleryAPI.resetPage();
+        console.log('this.state.page', galleryAPI.state.page);
+        // galleryAPI
+        //   .fetchImages(this.state.searchName)
+        //   .then((images) => {
+        //     console.log(images);
+        //     this.setState({ images });
+        //   })
+        //   .catch((error) => this.setState({ error }))
+        //   .finally(
+        //     this.setState({ loading: false, error: null, paginationBtn: true })
+        //   );
         fetch(
           `https://pixabay.com/api/?q=${this.state.searchName}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
         )
@@ -163,7 +183,7 @@ export default class ImageFinderApp extends Component {
         {/* The Gallery will be here soon... */}
         <Searchbar onSubmit={this.handleSearchName} />
         {this.state.loading && (
-          <div style={{ display: 'flex', ['justify-content']: 'center' }}>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
             <BallTriangle
               height={70}
               width={70}
