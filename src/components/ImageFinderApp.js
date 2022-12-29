@@ -41,7 +41,7 @@ export default class ImageFinderApp extends Component {
     page += 1;
     console.log(page);
 
-    setTimeout(() => {
+    // setTimeout(() => {
       fetch(
         `https://pixabay.com/api/?q=${this.state.searchName}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
       )
@@ -64,7 +64,7 @@ export default class ImageFinderApp extends Component {
         .finally(
           this.setState({ loading: false, error: null, paginationBtn: true })
         );
-    }, 500);
+    // }, 500);
   };
 
   componentDidUpdate(prevProp, prevState) {
