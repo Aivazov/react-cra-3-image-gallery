@@ -20,7 +20,7 @@ export default class GalleryAPI extends Component {
           return response.json();
         }
         return Promise.reject(
-          new Error(`We do not have images with tags "${query}"`)
+          new Error(`We do not have images with tag "${query}"`)
         );
       })
       .then((searchQuery) => {
@@ -28,7 +28,7 @@ export default class GalleryAPI extends Component {
         this.setState({ searchQuery });
         this.incrementPage();
         // console.log('page', page);
-        return searchQuery.hits;
+        return searchQuery;
       });
     // .catch((error) => this.setState({ error }))
     // .finally(

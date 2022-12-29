@@ -45,9 +45,12 @@ export default class ImageFinderApp extends Component {
     // console.log(page);
     galleryAPI
       .fetchImages(this.state.searchName)
-      .then((images) => {
-        //   console.log(images);
-        this.setState({ images });
+      .then((loadMore) => {
+        console.log('loadMore: ', loadMore);
+        this.setState((prev) => ({
+          images: [...prev, ...loadMore],
+        }));
+        console.log('imagesArray after LoadMore', this.state.images);
       })
       .catch((error) => this.setState({ error }))
       .finally(
