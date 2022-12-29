@@ -11,7 +11,7 @@ export default class GalleryAPI extends Component {
     const API_KEY = '31522217-1daa00f4dac69c1e930d1cd07';
     const { searchQuery, page } = this.state;
 
-    fetch(
+    return fetch(
       `https://pixabay.com/api/?q=${query}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
     )
       .then((response) => {
@@ -24,10 +24,11 @@ export default class GalleryAPI extends Component {
         );
       })
       .then((searchQuery) => {
-        // console.log('searchQuery', searchQuery);
+        console.log('searchQuery', searchQuery);
         this.setState({ searchQuery });
         this.incrementPage();
         // console.log('page', page);
+        return searchQuery.hits;
       });
     // .catch((error) => this.setState({ error }))
     // .finally(
