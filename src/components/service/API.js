@@ -24,7 +24,7 @@ export default class GalleryAPI extends Component {
         );
       })
       .then((searchQuery) => {
-        console.log('searchQuery', searchQuery);
+        // console.log('searchQuery', searchQuery);
         this.setState({ searchQuery });
         this.incrementPage();
         // console.log('page', page);
@@ -38,6 +38,7 @@ export default class GalleryAPI extends Component {
 
   incrementPage = () => {
     this.setState({ page: (this.state.page += 1) });
+    // console.log('this.state.page', this.state.page);
   };
 
   resetPage = () => {

@@ -50,7 +50,7 @@ export default class ImageFinderApp extends Component {
         this.setState((prev) => ({
           images: prev, ...loadMore.hits,
         }));
-        console.log('imagesArray after LoadMore', this.state.images);
+        // console.log('imagesArray after LoadMore', this.state.images);
       })
       .catch((error) => this.setState({ error }))
       .finally(
@@ -137,7 +137,9 @@ export default class ImageFinderApp extends Component {
           .catch((error) => this.setState({ error }))
           .finally(
             this.setState({ loading: false, error: null, paginationBtn: true })
-          );
+        );
+        galleryAPI.incrementPage();
+        
       }, 500);
     }
   }
