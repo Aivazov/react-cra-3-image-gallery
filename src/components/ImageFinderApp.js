@@ -48,7 +48,7 @@ export default class ImageFinderApp extends Component {
       .then((loadMore) => {
         console.log('loadMore: ', loadMore);
         this.setState((prev) => ({
-          images: [...prev, ...loadMore],
+          images: [prev, ...loadMore.hits],
         }));
         console.log('imagesArray after LoadMore', this.state.images);
       })
