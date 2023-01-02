@@ -1,7 +1,6 @@
 import { Component } from 'react';
 
 export default class GalleryAPI extends Component {
-  // constructor() {}
   state = {
     searchQuery: '',
     page: 1,

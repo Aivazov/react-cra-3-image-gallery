@@ -48,9 +48,9 @@ export default class ImageFinderApp extends Component {
       .then((loadMore) => {
         console.log('loadMore: ', loadMore);
         this.setState((prev) => ({
-          images: prev, ...loadMore.hits,
+          images: [...prev.images.hits, ...loadMore.hits],
         }));
-        // console.log('imagesArray after LoadMore', this.state.images);
+        console.log('imagesArray after LoadMore', this.state.images);
       })
       .catch((error) => this.setState({ error }))
       .finally(
@@ -87,49 +87,12 @@ export default class ImageFinderApp extends Component {
     if (prevState.searchName !== this.state.searchName) {
       console.log('The search request was changed');
       this.setState({ loading: true });
-      // this.setState({ status: 'pending' });
-
-      // const API_KEY = '31522217-1daa00f4dac69c1e930d1cd07';
-      // const PAGES = 'per_page=12';
-      let page = 1;
-
-      // fetch(
-      //   `https://pixabay.com/api/?q=${this.state.searchName}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
-      // )
-      //   .then((response) => response.json())
-      //   .then((images) => {
-      //     console.log(images);
-      //     // this.setState({ images, status: 'resolved' });
-      //     this.setState({ images });
-      //   });
 
       setTimeout(() => {
         galleryAPI.resetPage();
         console.log('this.state.page', galleryAPI.state.page);
-        // galleryAPI
-        //   .fetchImages(this.state.searchName)
-        //   .then((images) => {
-        //     console.log(images);
-        //     this.setState({ images });
-        //   })
-        //   .catch((error) => this.setState({ error }))
-        //   .finally(
-        //     this.setState({ loading: false, error: null, paginationBtn: true })
-        //   );
-        fetch(
-          `https://pixabay.com/api/?q=${this.state.searchName}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
-        )
-          .then((response) => {
-            if (response.ok) {
-              console.log('response is ok');
-              return response.json();
-            }
-            return Promise.reject(
-              new Error(
-                `We do not have images with tags "${this.state.searchName}"`
-              )
-            );
-          })
+        galleryAPI
+          .fetchImages(this.state.searchName)
           .then((images) => {
             console.log(images);
             this.setState({ images });
@@ -137,11 +100,25 @@ export default class ImageFinderApp extends Component {
           .catch((error) => this.setState({ error }))
           .finally(
             this.setState({ loading: false, error: null, paginationBtn: true })
-        );
+          );
         galleryAPI.incrementPage();
-        
+        window.scrollBy({
+          top: window.innerHeight - 200,
+          behavior: 'smooth',
+        });
       }, 500);
     }
+
+    // if (
+    //   (prevState.images.length !== 0) &
+    //   (prevState.images.length < this.state.images.length)
+    // ) {
+    //   window.scrollBy({
+    //     top: window.innerHeight - 200,
+    //     behavior: 'smooth',
+    //   });
+    //   // this.handlePagination(e)
+    // }
   }
 
   // async componentDidUpdate(prevProp, prevState) {
@@ -208,9 +185,13 @@ export default class ImageFinderApp extends Component {
         )}
         <ImageGallery items={this.state.images} />
         {this.state.paginationBtn && (
-          <button className="btn btn-primary" onClick={this.handlePagination}>
-            Load more
-          </button>
+          <div>
+            {/* <ImageGallery items={this.state.images} /> */}
+
+            <button className="btn btn-primary mt-3" onClick={this.handlePagination}>
+              Load more
+            </button>
+          </div>
         )}
       </div>
     );
