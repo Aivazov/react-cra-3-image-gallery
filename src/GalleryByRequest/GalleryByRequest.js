@@ -15,6 +15,7 @@ export default class GalleryByRequest extends Component {
     loading: false,
     totalItems: 0,
     loadMoreBtn: false,
+    error: null,
   };
 
   componentDidUpdate(prevProp, prevState) {
@@ -58,7 +59,7 @@ export default class GalleryByRequest extends Component {
         }
         this.handleResponse(images);
       })
-      .catch((err) => this.setState({ err }));
+      .catch((err) => this.setState({ error: err }));
   }
 
   handleResponse(images) {
@@ -69,14 +70,15 @@ export default class GalleryByRequest extends Component {
           totalItems: images.totalHits,
           loading: false,
           loadMoreBtn: true,
-          err: null,
+          error: null,
         })
       : this.setState((prev) => ({
           galleryImages: [...prev.images.hits, ...images.hits],
           loading: false,
           loadMoreBtn: true,
-          err: null,
+          error: null,
         }));
+    console.log('images after response ', images);
   }
 
   handleSearchingNameChange = (event) => {
@@ -113,6 +115,7 @@ export default class GalleryByRequest extends Component {
     const array = galleryImages;
     const restItems = totalItems - pageNum * 12;
 
+    console.log();
     return (
       <>
         <Searchbar onSubmit={this.handleSearchName} />

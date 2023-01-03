@@ -18,6 +18,13 @@ export default class GalleryAPI extends Component {
           console.log('response is ok');
           return response.json();
         }
+
+        // if (response.length === 0) {
+        //   return Promise.reject(
+        //     new Error(`We do not have images with tag "${query}"`)
+        //   );
+        // }
+
         return Promise.reject(
           new Error(`We do not have images with tag "${query}"`)
         );

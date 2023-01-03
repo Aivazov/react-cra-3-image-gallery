@@ -21,6 +21,7 @@ export default class ImageFinderApp extends Component {
     error: null,
     paginationBtn: false,
     status: 'idle',
+    totalImages: 0,
   };
 
   async componentDidMount() {
@@ -34,55 +35,6 @@ export default class ImageFinderApp extends Component {
     // }
   }
 
-  handleSearchName = (value) => {
-    this.setState({ searchName: value });
-  };
-
-  handlePagination = (e) => {
-    e.preventDefault();
-
-    // page += 1;
-    // console.log(page);
-    galleryAPI
-      .fetchImages(this.state.searchName)
-      .then((loadMore) => {
-        console.log('loadMore: ', loadMore);
-        this.setState((prev) => ({
-          images: [...prev.images.hits, ...loadMore.hits],
-        }));
-        console.log('imagesArray after LoadMore', this.state.images);
-      })
-      .catch((error) => this.setState({ error }))
-      .finally(
-        this.setState({ loading: false, error: null, paginationBtn: true })
-      );
-
-    // setTimeout(() => {
-    // fetch(
-    //   `https://pixabay.com/api/?q=${this.state.searchName}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
-    // )
-    //   .then((response) => {
-    //     if (response.ok) {
-    //       console.log('response is ok');
-    //       return response.json();
-    //     }
-    //     return Promise.reject(
-    //       new Error(
-    //         `We do not have images with tags "${this.state.searchName}"`
-    //       )
-    //     );
-    //   })
-    //   .then((images) => {
-    //     console.log(images);
-    //     this.setState({ images });
-    //   })
-    //   .catch((error) => this.setState({ error }))
-    //   .finally(
-    //     this.setState({ loading: false, error: null, paginationBtn: true })
-    //   );
-    // }, 500);
-  };
-
   componentDidUpdate(prevProp, prevState) {
     if (prevState.searchName !== this.state.searchName) {
       // console.log('The search request was changed');
@@ -95,15 +47,20 @@ export default class ImageFinderApp extends Component {
         galleryAPI
           .fetchImages(this.state.searchName)
           .then((images) => {
-            console.log(images);
-            this.setState({ images });
+            this.setState({
+              images: images,
+              totalImages: images.totalHits,
+            });
+            console.log('images', images);
+            console.log('images.totalHits', images.totalHits);
           })
           .catch((error) => this.setState({ error }))
           .finally(
             this.setState({ loading: false, error: null, paginationBtn: true })
-        );
-        
+          );
+
         galleryAPI.incrementPage();
+        console.log('galleryAPI.state.page', galleryAPI.state.page);
         window.scrollBy({
           top: window.innerHeight - 200,
           behavior: 'smooth',
@@ -111,16 +68,21 @@ export default class ImageFinderApp extends Component {
       }, 500);
     }
 
-    // if (
-    //   (prevState.images.length !== 0) &
-    //   (prevState.images.length < this.state.images.length)
-    // ) {
-    //   window.scrollBy({
-    //     top: window.innerHeight - 200,
-    //     behavior: 'smooth',
-    //   });
-    //   // this.handlePagination(e)
-    // }
+    if (
+      (prevState.images.length !== 0) &
+      (prevState.images.length < this.state.images.length)
+    ) {
+      galleryAPI.fetchImages(this.state.searchName).then((images) => {
+        this.setState((prev) => ({
+          images: [...prev.images, ...images],
+        }));
+      });
+
+      window.scrollBy({
+        top: window.innerHeight - 200,
+        behavior: 'smooth',
+      });
+    }
   }
 
   // async componentDidUpdate(prevProp, prevState) {
@@ -164,6 +126,52 @@ export default class ImageFinderApp extends Component {
   // }
   // }
 
+  handleSearchName = (value) => {
+    this.setState({ searchName: value });
+  };
+
+  handlePagination = (e) => {
+    e.preventDefault();
+    galleryAPI
+      .fetchImages(this.state.searchName)
+      .then((loadMore) => {
+        console.log('loadMore: ', loadMore);
+        this.setState((prev) => ({
+          images: [...prev.images.hits, ...loadMore.hits],
+        }));
+        console.log('imagesArray after LoadMore', this.state.images);
+      })
+      .catch((error) => this.setState({ error }))
+      .finally(
+        this.setState({ loading: false, error: null, paginationBtn: true })
+      );
+
+    // setTimeout(() => {
+    // fetch(
+    //   `https://pixabay.com/api/?q=${this.state.searchName}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
+    // )
+    //   .then((response) => {
+    //     if (response.ok) {
+    //       console.log('response is ok');
+    //       return response.json();
+    //     }
+    //     return Promise.reject(
+    //       new Error(
+    //         `We do not have images with tags "${this.state.searchName}"`
+    //       )
+    //     );
+    //   })
+    //   .then((images) => {
+    //     console.log(images);
+    //     this.setState({ images });
+    //   })
+    //   .catch((error) => this.setState({ error }))
+    //   .finally(
+    //     this.setState({ loading: false, error: null, paginationBtn: true })
+    //   );
+    // }, 500);
+  };
+
   render() {
     // console.log('Searching Tag in the App:', this.state.searchName);
     // console.log(this.state.images);
@@ -185,13 +193,16 @@ export default class ImageFinderApp extends Component {
             />
           </div>
         )}
-        {this.state.error && <p>Error, {this.state.error.message }</p>}
+        {this.state.error && <p>Error, {this.state.error.message}</p>}
         <ImageGallery items={this.state.images} />
         {this.state.paginationBtn && (
           <div>
             {/* <ImageGallery items={this.state.images} /> */}
 
-            <button className="btn btn-primary mt-3" onClick={this.handlePagination}>
+            <button
+              className="btn btn-primary mt-3"
+              onClick={this.handlePagination}
+            >
               Load more
             </button>
           </div>
