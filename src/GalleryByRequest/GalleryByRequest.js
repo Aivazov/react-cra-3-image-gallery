@@ -26,6 +26,16 @@ export default class GalleryByRequest extends Component {
 
       this.fetchData();
     }
+
+    if (
+      (prevState.galleryImages.length !== 0) &
+      (prevState.galleryImages.length < this.state.galleryImages.length)
+    ) {
+      window.scrollBy({
+        top: window.innerHeight - 200,
+        behavior: 'smooth',
+      });
+    }
   }
 
   fetchData() {
@@ -84,6 +94,11 @@ export default class GalleryByRequest extends Component {
 
   handleSearchName = (value) => {
     this.setState({ searchName: value });
+  };
+
+  handlePagination = () => {
+    this.setState((prev) => ({ pageNum: prev.pageNum + 1 }));
+    console.log(this.state.pageNum);
   };
 
   render() {
