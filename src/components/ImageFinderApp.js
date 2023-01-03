@@ -9,8 +9,8 @@ import { ImageGallery } from './ImageGallery/ImageGallery';
 // import GalleryAPI from './service/API';
 // import { ImageGalleryItem } from './components/ImageGalleryItem/ImageGalleryItem';
 
-let page = 1;
-const API_KEY = '31522217-1daa00f4dac69c1e930d1cd07';
+// let page = 1;
+// const API_KEY = '31522217-1daa00f4dac69c1e930d1cd07';
 const galleryAPI = new GalleryAPI();
 
 export default class ImageFinderApp extends Component {
@@ -85,11 +85,12 @@ export default class ImageFinderApp extends Component {
 
   componentDidUpdate(prevProp, prevState) {
     if (prevState.searchName !== this.state.searchName) {
-      console.log('The search request was changed');
+      // console.log('The search request was changed');
       this.setState({ loading: true });
 
       setTimeout(() => {
         galleryAPI.resetPage();
+
         console.log('this.state.page', galleryAPI.state.page);
         galleryAPI
           .fetchImages(this.state.searchName)
@@ -100,7 +101,8 @@ export default class ImageFinderApp extends Component {
           .catch((error) => this.setState({ error }))
           .finally(
             this.setState({ loading: false, error: null, paginationBtn: true })
-          );
+        );
+        
         galleryAPI.incrementPage();
         window.scrollBy({
           top: window.innerHeight - 200,
@@ -183,6 +185,7 @@ export default class ImageFinderApp extends Component {
             />
           </div>
         )}
+        {this.state.error && <p>Error, {this.state.error.message }</p>}
         <ImageGallery items={this.state.images} />
         {this.state.paginationBtn && (
           <div>
