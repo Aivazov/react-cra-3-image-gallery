@@ -95,9 +95,21 @@ export default class ImageGallery extends Component {
         )}
 
         {isLoading && (
-          <p style={{ fontSize: 24, display: 'flex', alignItems: 'center' }}>
-            Loading...
-          </p>
+          // <p style={{ fontSize: 24, display: 'flex', alignItems: 'center' }}>
+          //   Loading...
+          // </p>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <BallTriangle
+              height={70}
+              width={70}
+              radius={5}
+              color="#3f51b5"
+              ariaLabel="ball-triangle-loading"
+              wrapperClass={{}}
+              wrapperStyle=""
+              visible={true}
+            />
+          </div>
         )}
       </div>
     );
