@@ -7,6 +7,7 @@ import axios from 'axios';
 import './Searchbar/Searchbar.css';
 import Loader from './Loader/Loader';
 import Button from './Button/Button';
+import Modal from './Modal/Modal.js';
 
 // axios.defaults.headers.common['Authorization'] =
 //   '31522217-1daa00f4dac69c1e930d1cd07';
@@ -33,6 +34,7 @@ export default class ImageGallery extends Component {
     searchQuery: '',
     isLoading: false,
     error: null,
+    showModal: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -52,6 +54,7 @@ export default class ImageGallery extends Component {
       currentPage: 1,
       images: [],
       error: null,
+      showModal: false,
     });
   };
 
@@ -70,8 +73,15 @@ export default class ImageGallery extends Component {
       .catch((error) => this.setState({ error }))
       .finally(() => this.setState({ isLoading: false }));
   };
+
+  toggleModal = () => {
+    this.setState((state) => ({
+      showModal: !state.showModal,
+    }));
+  };
+
   render() {
-    const { images, isLoading, error } = this.state;
+    const { images, isLoading, showModal, error } = this.state;
     const shouldRenderLoadMoreButton = images.length > 0 && !isLoading;
     // console.log(images);
     return (
@@ -80,7 +90,15 @@ export default class ImageGallery extends Component {
         {/* {images === [] &&
           toast.warning('We found no matches. Please try again')} */}
         {error && toast.warning(`Something went wrong: ${error.message}`)}
+        <button type="button" onClick={this.toggleModal}>
+          Open Modal
+        </button>
 
+        {showModal && (
+          <Modal onClose={this.toggleModal}>
+            <div>Hi there</div>
+          </Modal>
+        )}
         {/* <ul>
           {images.map(({ title, url }) => (
             <li key={title}>
