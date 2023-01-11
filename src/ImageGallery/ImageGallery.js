@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import './Searchbar/Searchbar.css';
 import Loader from './Loader/Loader';
+import Button from './Button/Button';
 
 // axios.defaults.headers.common['Authorization'] =
 //   '31522217-1daa00f4dac69c1e930d1cd07';
@@ -94,15 +95,7 @@ export default class ImageGallery extends Component {
           ))}
         </ul>
 
-        {shouldRenderLoadMoreButton && (
-          <button
-            type="button"
-            className="btn btn-primary mt-3 mb-3"
-            onClick={this.fetchImages}
-          >
-            Load More
-          </button>
-        )}
+        {shouldRenderLoadMoreButton && <Button onClick={this.fetchImages} />}
 
         {isLoading && <Loader />}
       </div>
