@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { BallTriangle } from 'react-loader-spinner';
 import Searchbar from './Searchbar/Searchbar';
+import { ToastContainer, promise, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import './Searchbar/Searchbar.css';
@@ -29,6 +30,11 @@ export default class ImageGallery extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevState.searchQuery !== this.state.searchQuery) {
       this.fetchImages();
+
+      // window.scrollBy({
+      //   top: window.innerHeight - 200,
+      //   behavior: 'smooth',
+      // });
     }
   }
 
@@ -60,10 +66,13 @@ export default class ImageGallery extends Component {
   render() {
     const { images, isLoading, error } = this.state;
     const shouldRenderLoadMoreButton = images.length > 0 && !isLoading;
+    console.log(images);
     return (
       <div>
         <Searchbar onSubmit={this.onChangeQuery} />
-        {error && <h1>This is a mistake: {error.message}</h1>}
+        {/* {images === [] &&
+          toast.warning('We found no matches. Please try again')} */}
+        {error && toast.warning(`${error.message}`)}
 
         {/* <ul>
           {images.map(({ title, url }) => (
