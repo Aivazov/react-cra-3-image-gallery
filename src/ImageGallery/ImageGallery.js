@@ -5,6 +5,7 @@ import { ToastContainer, promise, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import './Searchbar/Searchbar.css';
+import Loader from './Loader/Loader';
 
 // axios.defaults.headers.common['Authorization'] =
 //   '31522217-1daa00f4dac69c1e930d1cd07';
@@ -103,23 +104,7 @@ export default class ImageGallery extends Component {
           </button>
         )}
 
-        {isLoading && (
-          // <p style={{ fontSize: 24, display: 'flex', alignItems: 'center' }}>
-          //   Loading...
-          // </p>
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <BallTriangle
-              height={70}
-              width={70}
-              radius={5}
-              color="#3f51b5"
-              ariaLabel="ball-triangle-loading"
-              wrapperClass={{}}
-              wrapperStyle=""
-              visible={true}
-            />
-          </div>
-        )}
+        {isLoading && <Loader />}
       </div>
     );
   }
