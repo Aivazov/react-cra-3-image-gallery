@@ -17,7 +17,13 @@ const fetchImages = ({ searchQuery = '', currentPage = 1, pageSize = 12 }) => {
     .get(
       `https://pixabay.com/api/?key=${API_KEY}&q=${searchQuery}&page=${currentPage}&per_page=${pageSize}&image_type=photo&orientation=horizontal`
     )
-    .then((res) => res.data.hits);
+    .then((res) => {
+      // if (!res.data.totalHits) {
+      //   console.log('images', this.state.images);
+      // }
+      console.log(res);
+      return res.data.hits;
+    });
 };
 
 export default class ImageGallery extends Component {
@@ -54,7 +60,6 @@ export default class ImageGallery extends Component {
     const options = { searchQuery, currentPage };
 
     this.setState({ isLoading: true });
-
     fetchImages(options)
       .then((images) => {
         this.setState((prevState) => ({
@@ -68,13 +73,13 @@ export default class ImageGallery extends Component {
   render() {
     const { images, isLoading, error } = this.state;
     const shouldRenderLoadMoreButton = images.length > 0 && !isLoading;
-    console.log(images);
+    // console.log(images);
     return (
       <div>
         <Searchbar onSubmit={this.onChangeQuery} />
         {/* {images === [] &&
           toast.warning('We found no matches. Please try again')} */}
-        {error && toast.warning(`${error.message}`)}
+        {error && toast.warning(`Something went wrong: ${error.message}`)}
 
         {/* <ul>
           {images.map(({ title, url }) => (
