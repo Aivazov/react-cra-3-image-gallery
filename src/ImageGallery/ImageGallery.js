@@ -90,15 +90,10 @@ export default class ImageGallery extends Component {
         {/* {images === [] &&
           toast.warning('We found no matches. Please try again')} */}
         {error && toast.warning(`Something went wrong: ${error.message}`)}
-        <button type="button" onClick={this.toggleModal}>
+        {/* <button type="button" onClick={this.toggleModal}>
           Open Modal
-        </button>
+        </button> */}
 
-        {showModal && (
-          <Modal onClose={this.toggleModal}>
-            <div>Hi there</div>
-          </Modal>
-        )}
         {/* <ul>
           {images.map(({ title, url }) => (
             <li key={title}>
@@ -112,8 +107,13 @@ export default class ImageGallery extends Component {
         <ul className="gallery">
           {/* <ImageGalleryItem images={items} /> */}
           {images?.map((item) => (
-            <li key={item.id}>
+            <li key={item.id} onClick={this.toggleModal}>
               <img src={item.webformatURL} width="240" alt="..." />
+              {showModal && (
+                <Modal onClose={this.toggleModal}>
+                  <img src={item.largeImageURL} width="940" alt="..." />
+                </Modal>
+              )}
             </li>
           ))}
         </ul>

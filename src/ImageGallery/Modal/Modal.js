@@ -13,7 +13,6 @@ export default class Modal extends Component {
   }
 
   handleEscape = (e) => {
-    console.log(e.code);
     if (e.code === 'Escape') {
       this.props.onClose();
     }
