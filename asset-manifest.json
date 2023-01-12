@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/react-cra-3-image-gallery/static/css/main.94669d2d.css",
+    "main.js": "/react-cra-3-image-gallery/static/js/main.6ff73b65.js",
+    "static/js/787.7e47a4cb.chunk.js": "/react-cra-3-image-gallery/static/js/787.7e47a4cb.chunk.js",
+    "index.html": "/react-cra-3-image-gallery/index.html",
+    "main.94669d2d.css.map": "/react-cra-3-image-gallery/static/css/main.94669d2d.css.map",
+    "main.6ff73b65.js.map": "/react-cra-3-image-gallery/static/js/main.6ff73b65.js.map",
+    "787.7e47a4cb.chunk.js.map": "/react-cra-3-image-gallery/static/js/787.7e47a4cb.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.94669d2d.css",
+    "static/js/main.6ff73b65.js"
+  ]
+}
