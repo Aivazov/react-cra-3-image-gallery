@@ -23,7 +23,6 @@ const fetchImages = ({ searchQuery = '', currentPage = 1, pageSize = 12 }) => {
       // if (!res.data.totalHits) {
       //   console.log('images', this.state.images);
       // }
-      console.log(res);
       return res.data.hits;
     });
 };
