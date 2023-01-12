@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { BallTriangle } from 'react-loader-spinner';
-import Searchbar from './Searchbar/Searchbar';
-import { ToastContainer, promise, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
+
+import Searchbar from './Searchbar/Searchbar';
 import './Searchbar/Searchbar.css';
+import ImageGalleryList from './ImageGalleryList/ImageGallery';
 import Loader from './Loader/Loader';
 import Button from './Button/Button';
 import Modal from './Modal/Modal.js';
@@ -35,6 +36,7 @@ export default class ImageGallery extends Component {
     isLoading: false,
     error: null,
     showModal: false,
+    currentLargeImg: {},
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -74,49 +76,35 @@ export default class ImageGallery extends Component {
       .finally(() => this.setState({ isLoading: false }));
   };
 
-  toggleModal = () => {
+  toggleModal = (largeImage) => {
     this.setState((state) => ({
       showModal: !state.showModal,
+      currentLargeImg: largeImage,
     }));
   };
 
   render() {
-    const { images, isLoading, showModal, error } = this.state;
+    const { images, isLoading, showModal, currentLargeImg, error } = this.state;
     const shouldRenderLoadMoreButton = images.length > 0 && !isLoading;
-    // console.log(images);
+
     return (
       <div>
         <Searchbar onSubmit={this.onChangeQuery} />
         {/* {images === [] &&
           toast.warning('We found no matches. Please try again')} */}
         {error && toast.warning(`Something went wrong: ${error.message}`)}
-        {/* <button type="button" onClick={this.toggleModal}>
-          Open Modal
-        </button> */}
 
-        {/* <ul>
-          {images.map(({ title, url }) => (
-            <li key={title}>
-              <a href={url} target="_blank" rel="noopener noreferrer">
-                {title}
-              </a>
-            </li>
-          ))}
-        </ul> */}
+        <ImageGalleryList items={images} modal={this.toggleModal} />
 
-        <ul className="gallery">
-          {/* <ImageGalleryItem images={items} /> */}
-          {images?.map((item) => (
-            <li key={item.id} onClick={this.toggleModal}>
-              <img src={item.webformatURL} width="240" alt="..." />
-              {showModal && (
-                <Modal onClose={this.toggleModal}>
-                  <img src={item.largeImageURL} width="940" alt="..." />
-                </Modal>
-              )}
-            </li>
-          ))}
-        </ul>
+        {showModal && (
+          <Modal onClose={this.toggleModal}>
+            <img
+              src={currentLargeImg.largeImageURL}
+              min-width="720"
+              alt="..."
+            />
+          </Modal>
+        )}
 
         {shouldRenderLoadMoreButton && <Button onClick={this.fetchImages} />}
 
