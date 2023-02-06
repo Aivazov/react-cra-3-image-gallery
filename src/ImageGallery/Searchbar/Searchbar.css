@@ -29,8 +29,10 @@
 
 .button {
   display: inline-block;
-  width: 36px;
-  height: 36px;
+  /* width: 36px;
+  height: 36px; */
+  padding-top: 6px;
+  padding-bottom: 6px;
   border: 0;
   /* background-image: url('https://image.flaticon.com/icons/svg/149/149852.svg'); */
   /* background-size: 40%; */
@@ -68,6 +70,7 @@
   outline: none;
   padding-left: 4px;
   padding-right: 4px;
+  padding-top: 7px;
   padding-bottom: 7px;
 }
 
